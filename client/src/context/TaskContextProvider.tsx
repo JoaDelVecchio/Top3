@@ -6,7 +6,7 @@ interface TaskContextType {
   tasks: ITask[];
   error: string | null;
   loading: boolean;
-  updateTasks: (tasks: ITask[]) => void;
+  setTasks: React.Dispatch<React.SetStateAction<ITask[]>>;
   refetch: () => void;
 }
 
@@ -21,16 +21,10 @@ export const useTaskContext = () => {
 };
 
 const TaskContextProvider = ({ children }: { children: React.ReactNode }) => {
-  const { tasks, setTasks, error, loading, refetch } = useFetchTasks();
-
-  const updateTasks = (tasks: ITask[]) => {
-    setTasks(tasks);
-  };
+  const { tasks = [], setTasks, error, loading, refetch } = useFetchTasks();
 
   return (
-    <TaskContext.Provider
-      value={{ tasks, updateTasks, error, loading, refetch }}
-    >
+    <TaskContext.Provider value={{ tasks, setTasks, error, loading, refetch }}>
       {children}
     </TaskContext.Provider>
   );

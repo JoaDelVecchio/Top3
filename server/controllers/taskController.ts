@@ -13,7 +13,11 @@ export const getTasks = async (
   try {
     const tasks: ITask[] = await TaskModel.find();
 
-    if (tasks.length === 0) throw new AppError("No tasks were found", 404);
+    if (!tasks || tasks.length === 0) {
+      console.error('No tasks found');
+      res.status(200).json({tasks:[]})
+      return
+    }
 
     console.log("Fetched tasks succesfully");
     res.status(200).json({ tasks });
@@ -31,7 +35,7 @@ export const getTask = async (
     const id = req.params.id;
     if (!id) throw new AppError("Identifier not found", 404);
 
-    const task: ITask | null = await TaskModel.findById({ id });
+    const task: ITask | null = await TaskModel.findById(id );
 
     if (!task) throw new AppError("Task not found", 404);
 
@@ -54,7 +58,7 @@ export const createTask = async (
       title === undefined ||
       completed === undefined ||
       userId === undefined ||
-      completed === undefined
+      category === undefined
     )
       throw new AppError("Required fields are missing", 400);
 
@@ -87,7 +91,7 @@ export const updateTask = async (
     if (
       title === undefined &&
       completed === undefined &&
-      completed === undefined
+      category === undefined
     )
       throw new AppError("At least one field must be completed", 400);
 
