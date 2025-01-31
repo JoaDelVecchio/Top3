@@ -1,9 +1,18 @@
-import React from 'react'
+import { useTaskContext } from "../context/TaskContextProvider";
+import { ITask } from "../types/types";
 
 const Home = () => {
-  return (
-    <div>Home</div>
-  )
-}
+  const { tasks, error, loading } = useTaskContext();
 
-export default Home
+  if (error) return <p>{error}</p>;
+  if (loading) return <p>loading...</p>;
+  return (
+    <div>
+      {tasks.map((task: ITask) => (
+        <li key={task._id}>{task.title}</li>
+      ))}
+    </div>
+  );
+};
+
+export default Home;
