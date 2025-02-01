@@ -21,7 +21,7 @@ export const createTask = async (task: any) => {
     return newTask;
   } catch (error) {
     console.error("Error creating new task", error);
-    throw (error as Error).message;
+    throw error;
   }
 };
 
@@ -45,6 +45,25 @@ export const updateTask = async (id: string, updates: any) => {
       "Error updating task:",
       (error as Error).message || "Unexpected Error",
     );
-    throw (error as Error).message;
+    throw error;
+  }
+};
+
+export const deleteTask = async (id: string) => {
+  try {
+    const response = await fetch(`${API_URL}/tasks/${id}`, {
+      method: "DELETE",
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message);
+    }
+
+    const data = await response.json();
+    return data.deletedTask;
+  } catch (error) {
+    console.error("Error deleting task", (error as Error).message);
+    throw error;
   }
 };
