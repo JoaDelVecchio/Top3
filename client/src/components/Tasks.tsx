@@ -1,10 +1,10 @@
-import { useTaskContext } from "../context/TaskContextProvider";
-import TaskCard from "./TaskCard";
+import { useTaskContext } from '../context/TaskContextProvider';
+import TaskCard from './TaskCard';
 
 const Tasks = () => {
   const { tasks } = useTaskContext();
   return (
-    <div>
+    <div className="flex flex-wrap gap-10">
       {tasks && tasks.length > 0 ? (
         tasks
           .filter((task) => task && !task.completed)

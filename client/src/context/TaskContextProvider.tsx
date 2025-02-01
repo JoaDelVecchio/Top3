@@ -1,6 +1,6 @@
-import { ITask } from "../types/types";
-import { createContext, useContext } from "react";
-import useFetchTasks from "../hooks/useFetchTasks";
+import { ITask } from '../types/types';
+import { createContext, useContext } from 'react';
+import useFetchTasks from '../hooks/useFetchTasks';
 
 interface TaskContextType {
   tasks: ITask[];
@@ -11,12 +11,12 @@ interface TaskContextType {
 }
 
 export const TaskContext = createContext<TaskContextType | undefined>(
-  undefined,
+  undefined
 );
 
 export const useTaskContext = () => {
   const context = useContext(TaskContext);
-  if (!context) throw new Error("TaskContentProvider must wrap main component");
+  if (!context) throw new Error('TaskContentProvider must wrap main component');
   return context;
 };
 

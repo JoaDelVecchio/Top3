@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { ITask } from "../types/types";
+import { useEffect, useState } from 'react';
+import { ITask } from '../types/types';
 
 const useFetchTasks = () => {
   const [error, setError] = useState<string | null>(null);
@@ -15,14 +15,14 @@ const useFetchTasks = () => {
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message || "Failed to fetch tasks");
+        throw new Error(errorData.message || 'Failed to fetch tasks');
       }
 
       const data = await response.json();
-      console.log("Fetched tasks succesfully");
+      console.log('Fetched tasks succesfully');
       setTasks(data.tasks);
     } catch (error) {
-      console.log("Failed to fetch tasks", (error as Error).message);
+      console.log('Failed to fetch tasks', (error as Error).message);
       setError((error as Error).message);
     } finally {
       setLoading(false);
