@@ -3,6 +3,7 @@ import { useTaskContext } from "../context/TaskContextProvider";
 import { useState } from "react";
 import { ITask } from "../types/types";
 import { createTask } from "../services/api";
+import ErrorMessage from "./ErrorMessage";
 
 const TaskForm = () => {
   const { setTasks } = useTaskContext();
@@ -57,7 +58,7 @@ const TaskForm = () => {
       </form>
 
       {/* ✅ Show submission error */}
-      {submitError && <p className="text-red-500">{submitError}</p>}
+      {submitError && <ErrorMessage error={submitError} />}
     </div>
   );
 };

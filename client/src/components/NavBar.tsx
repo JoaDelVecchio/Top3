@@ -1,4 +1,4 @@
-import { NavLink } from 'react-router-dom';
+import { NavLink } from "react-router-dom";
 
 const NavBar = () => {
   return (
@@ -9,8 +9,8 @@ const NavBar = () => {
             className={({ isActive }) => {
               return `${
                 isActive
-                  ? 'font-semibold text-blue-400'
-                  : 'hover duration-300 hover:font-bold hover:text-blue-300'
+                  ? "font-semibold text-blue-400"
+                  : "hover duration-300 hover:font-bold hover:text-blue-300"
               }`;
             }}
             to="/"
@@ -23,13 +23,13 @@ const NavBar = () => {
             className={({ isActive }) => {
               return `${
                 isActive
-                  ? 'font-semibold text-blue-400'
-                  : 'hover duration-300 hover:font-bold hover:text-blue-300'
+                  ? "font-semibold text-blue-400"
+                  : "hover duration-300 hover:font-bold hover:text-blue-300"
               }`;
             }}
-            to="/vault"
+            to="/wins"
           >
-            Vault
+            Wins
           </NavLink>
         </li>
       </ul>

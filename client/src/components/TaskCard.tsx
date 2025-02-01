@@ -2,6 +2,7 @@ import { useState } from "react";
 import { ITask } from "../types/types";
 import { updateTask } from "../services/api";
 import { useTaskContext } from "../context/TaskContextProvider";
+import ErrorMessage from "./ErrorMessage";
 
 const TaskCard = ({ task }: { task: ITask }) => {
   const [error, setError] = useState<string | null>(null);
@@ -24,23 +25,45 @@ const TaskCard = ({ task }: { task: ITask }) => {
       setLoading(false);
     }
   };
-  if (error) return <p>{error}</p>;
+
+  const handleDelete = () => {};
+  const handleEdit = () => {};
+
+  if (error) return <ErrorMessage error={error} />;
   return (
     <div className=" gap-4 flex h-32 w-72 flex-col justify-center rounded-lg border border-blue-100 p-5 shadow-md duration-300 hover:scale-105 hover:shadow-lg hover:border-blue-300">
-      <h4 className="text-center  bg-blue-100 text-sm font-semibold  rounded-lg px-3">
-        {task.category}
-      </h4>
-      <div className="flex items-center justify-between">
-        <h3 className="font-medium text-lg">{task.title}</h3>
-        {!task.completed && (
+      <div className="flex">
+        <h4 className="text-center flex-grow  bg-blue-100 text-sm font-semibold  rounded-md">
+          {task.category}
+        </h4>
+      </div>
+      <div className="flex flex-col items-center justify-between gap-4 px-2">
+        <div className="flex justify-center items-center gap-4">
+          <h3 className="font-bold text-2xl">{task.title} </h3>
+          <button
+            className="text-md text-blue-300 hover:scale-125 duration-300"
+            onClick={handleEdit}
+            disabled={loading}
+          >
+            ✍️
+          </button>
+        </div>
+        <div className="flex w-full justify-between items-center gap-4">
+          <button
+            className="text-md text-blue-300 hover:scale-125 duration-300"
+            onClick={handleDelete}
+            disabled={loading}
+          >
+            {loading ? "Deleting..." : "❌"}
+          </button>
           <button
             className="text-md text-blue-300 hover:scale-125 duration-300"
             onClick={handleCompleted}
             disabled={loading}
           >
-            {loading ? "Updating..." : "✅"}
+            {loading ? "Another Win..." : "✅"}
           </button>
-        )}
+        </div>
       </div>
     </div>
   );

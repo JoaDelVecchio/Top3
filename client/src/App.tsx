@@ -4,7 +4,7 @@ import '@fontsource/montserrat/700.css';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import Layout from './routes/Layout';
 import Home from './routes/Home';
-import Vault from './routes/Vault';
+import Vault from './routes/Wins';
 
 const App = () => {
   const router = createBrowserRouter([
