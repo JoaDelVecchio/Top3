@@ -1,48 +1,40 @@
-import { ITask } from "../types/types";
-import { useTaskContext } from "../context/TaskContextProvider";
-import { API_URL } from "../config";
 import { useState } from "react";
+import { ITask } from "../types/types";
+import { updateTask } from "../services/api";
+import { useTaskContext } from "../context/TaskContextProvider";
 
 const TaskCard = ({ task }: { task: ITask }) => {
-  const { setTasks } = useTaskContext();
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
+  const { setTasks } = useTaskContext(); // ✅ Get `setTasks` from context
 
-  const handleCompleted = async (id: string) => {
+  const handleCompleted = async () => {
     try {
-      setError(null);
       setLoading(true);
-      const response = await fetch(`${API_URL}/tasks/${id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ completed: true }),
-      });
+      setError(null);
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message);
-      }
+      const updatedTask = await updateTask(task._id, { completed: true });
 
-      const data = await response.json();
-      const updatedTask = data.task;
-
-      setTasks((prevTasks: ITask[]) =>
-        prevTasks.map((task) => (task._id === id ? updatedTask : task)),
+      // ✅ Update state with the new task
+      setTasks((prevTasks) =>
+        prevTasks.map((t) => (t._id === task._id ? updatedTask : t)),
       );
     } catch (error) {
-      console.error((error as Error).message || "Failed to fetch task");
-      setError((error as Error).message || "Failed to fetch task");
+      setError(error as string);
+    } finally {
+      setLoading(false);
     }
   };
-  if (error) <p>{error}</p>;
-  if (loading) <p>Loading...</p>;
+
   return (
     <div>
+      {error && <p>{error}</p>}
+      {loading && <p>Loading...</p>}
       <h3>{task.title}</h3>
       <h4>{task.category}</h4>
       {!task.completed && (
-        <button onClick={() => handleCompleted(task._id)}>
-          Mark as completed
+        <button onClick={handleCompleted} disabled={loading}>
+          {loading ? "Updating..." : "Mark as completed"}
         </button>
       )}
     </div>
