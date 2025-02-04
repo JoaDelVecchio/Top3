@@ -17,7 +17,7 @@ const App = () => {
           element: <Home />,
         },
         {
-          path: 'vault',
+          path: 'wins',
           element: <Vault />,
         },
       ],

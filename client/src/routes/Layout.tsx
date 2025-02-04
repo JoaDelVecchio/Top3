@@ -3,7 +3,7 @@ import NavBar from '../components/NavBar';
 
 const Layout = () => {
   return (
-    <div className="flex h-full w-full flex-col">
+    <div className="flex h-full w-full flex-col font-montserrat">
       <header className="flex h-20 items-center justify-center rounded-md shadow-lg">
         <NavBar />
       </header>
