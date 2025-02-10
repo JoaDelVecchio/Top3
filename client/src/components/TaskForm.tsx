@@ -1,19 +1,19 @@
-import React, { useState } from "react";
-import { useTaskContext } from "../context/TaskContextProvider";
-import { ITask } from "../types/types";
-import { createTask } from "../services/api";
-import ErrorMessage from "./ErrorMessage";
+import React, { useState } from 'react';
+import { useTaskContext } from '../context/TaskContextProvider';
+import { ITask } from '../types/types';
+import { createTask } from '../services/api';
+import ErrorMessage from './ErrorMessage';
 
 const TaskForm = () => {
   const { setTasks } = useTaskContext();
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [formData, setFormData] = useState({
-    title: "",
-    category: "",
+    title: '',
+    category: '',
   }); // Single state for all form fields
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -27,7 +27,7 @@ const TaskForm = () => {
     setSubmitError(null);
 
     if (!formData.title || !formData.category) {
-      setSubmitError("Please enter a task and select a category.");
+      setSubmitError('Please enter a task and select a category.');
       return;
     }
 
@@ -36,9 +36,9 @@ const TaskForm = () => {
     try {
       const savedTask = await createTask(newTask);
       setTasks((prevTasks: ITask[]) => [...prevTasks, savedTask]);
-      setFormData({ title: "", category: "" }); // Reset form after submission
+      setFormData({ title: '', category: '' }); // Reset form after submission
     } catch (error) {
-      setSubmitError((error as string) || "Failed to create new task");
+      setSubmitError((error as string) || 'Failed to create new task');
     }
   };
 
@@ -52,6 +52,7 @@ const TaskForm = () => {
           onChange={handleChange} // Generic change handler
           placeholder="New Task..."
           required
+          maxLength={30}
           className="rounded-lg border p-2 text-gray-500 shadow-md duration-300 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-gray-500"
         />
         <select

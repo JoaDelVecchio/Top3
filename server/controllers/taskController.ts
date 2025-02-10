@@ -8,15 +8,15 @@ import { ITask } from "../types/types";
 export const getTasks = async (
   req: Request,
   res: Response,
-  next: NextFunction,
+  next: NextFunction
 ) => {
   try {
     const tasks: ITask[] = await TaskModel.find();
 
-    if (!tasks || tasks.length === 0) {
-      console.error('No tasks found');
-      res.status(200).json({tasks:[]})
-      return
+    if (tasks.length === 0) {
+      console.error("No tasks found");
+      res.status(200).json({ tasks: [] });
+      return;
     }
 
     console.log("Fetched tasks succesfully");
@@ -29,13 +29,13 @@ export const getTasks = async (
 export const getTask = async (
   req: Request,
   res: Response,
-  next: NextFunction,
+  next: NextFunction
 ) => {
   try {
     const id = req.params.id;
     if (!id) throw new AppError("Identifier not found", 404);
 
-    const task: ITask | null = await TaskModel.findById(id );
+    const task: ITask | null = await TaskModel.findById(id);
 
     if (!task) throw new AppError("Task not found", 404);
 
@@ -49,7 +49,7 @@ export const getTask = async (
 export const createTask = async (
   req: Request,
   res: Response,
-  next: NextFunction,
+  next: NextFunction
 ) => {
   try {
     const { title, completed, userId, category } = req.body;
@@ -80,7 +80,7 @@ export const createTask = async (
 export const updateTask = async (
   req: Request,
   res: Response,
-  next: NextFunction,
+  next: NextFunction
 ) => {
   try {
     const id = req.params.id;
@@ -98,7 +98,7 @@ export const updateTask = async (
     const updatedTask = await TaskModel.findByIdAndUpdate(
       id,
       { title, completed, category },
-      { new: true },
+      { new: true }
     );
 
     if (!updatedTask) throw new AppError("Workout not found", 404);
@@ -112,7 +112,7 @@ export const updateTask = async (
 export const deleteTask = async (
   req: Request,
   res: Response,
-  next: NextFunction,
+  next: NextFunction
 ) => {
   try {
     const id = req.params.id;

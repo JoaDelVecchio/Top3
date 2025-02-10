@@ -1,8 +1,8 @@
-import { useState } from "react";
-import { ITask } from "../types/types";
-import { updateTask, deleteTask } from "../services/api";
-import { useTaskContext } from "../context/TaskContextProvider";
-import ErrorMessage from "./ErrorMessage";
+import { useState } from 'react';
+import { ITask } from '../types/types';
+import { updateTask, deleteTask } from '../services/api';
+import { useTaskContext } from '../context/TaskContextProvider';
+import ErrorMessage from './ErrorMessage';
 
 const TaskCard = ({ task }: { task: ITask }) => {
   const [error, setError] = useState<string | null>(null);
@@ -12,7 +12,7 @@ const TaskCard = ({ task }: { task: ITask }) => {
     title: task.title,
     category: task.category,
   }); // Using formData here for consistency
-  const { setTasks } = useTaskContext();
+  const { setTasks, setWins } = useTaskContext();
 
   // Handle mark task as completed
   const handleCompleted = async () => {
@@ -22,10 +22,11 @@ const TaskCard = ({ task }: { task: ITask }) => {
 
       const updatedTask = await updateTask(task._id, { completed: true });
       setTasks((prevTasks) =>
-        prevTasks.map((t) => (t._id === task._id ? updatedTask : t)),
+        prevTasks.map((t) => (t._id === task._id ? updatedTask : t))
       );
+      setWins((prevWins) => (prevWins ? prevWins + 1 : prevWins));
     } catch (error) {
-      setError((error as Error).message || "Failed to update task");
+      setError((error as Error).message || 'Failed to update task');
     } finally {
       setLoading(false);
     }
@@ -39,10 +40,10 @@ const TaskCard = ({ task }: { task: ITask }) => {
 
       const deletedTask = await deleteTask(task._id);
       setTasks((prevTasks) =>
-        prevTasks.filter((task) => task._id !== deletedTask._id),
+        prevTasks.filter((task) => task._id !== deletedTask._id)
       );
     } catch (error) {
-      setError((error as Error).message || "Failed to delete task");
+      setError((error as Error).message || 'Failed to delete task');
     } finally {
       setLoading(false);
     }
@@ -58,7 +59,7 @@ const TaskCard = ({ task }: { task: ITask }) => {
 
   // Handle the change in input fields
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -79,14 +80,14 @@ const TaskCard = ({ task }: { task: ITask }) => {
       });
 
       setTasks((prevTasks) =>
-        prevTasks.map((t) => (t._id === task._id ? updatedTask : t)),
+        prevTasks.map((t) => (t._id === task._id ? updatedTask : t))
       );
       setFormData((prevData) => ({
         ...prevData,
         isEditing: false, // Close the edit form after saving
       }));
     } catch (error) {
-      setError((error as Error).message || "Failed to update task");
+      setError((error as Error).message || 'Failed to update task');
     } finally {
       setLoading(false);
     }
@@ -95,31 +96,41 @@ const TaskCard = ({ task }: { task: ITask }) => {
   if (error) return <ErrorMessage error={error} />;
 
   return (
-    <div className="gap-4 flex h-32 w-72 flex-col justify-center rounded-lg border border-blue-100 p-5 shadow-md duration-300 hover:scale-105 hover:shadow-lg hover:border-blue-300">
+    <div className="h-42 flex w-72 flex-col justify-center gap-4 rounded-lg border border-blue-100 p-5 shadow-md duration-300 hover:scale-105 hover:border-blue-300 hover:shadow-lg">
       <div className="flex">
-        <h4 className="text-center flex-grow bg-blue-100 text-sm font-semibold rounded-md">
+        <h4 className="flex-grow rounded-md bg-blue-100 text-center text-sm font-semibold">
           {task.category}
         </h4>
       </div>
       <div className="flex flex-col items-center justify-between gap-4 px-2">
-        <div className="flex justify-center items-center gap-4">
+        <div className="flex items-center justify-center gap-4">
           {formData.isEditing ? (
             <input
               type="text"
               name="title"
               value={formData.title} // Bind input to formData
               onChange={handleChange} // Generic change handler
-              className="text-lg p-2 border rounded-md"
+              className="rounded-md border p-2 text-lg"
             />
           ) : (
-            <h3 className="font-bold text-2xl">{task.title}</h3>
+            <h3
+              className={`max-h-full max-w-full font-bold ${
+                task.title.length > 20
+                  ? 'text-sm'
+                  : task.title.length > 10
+                    ? 'text-lg'
+                    : 'text:2xl'
+              }`}
+            >
+              {task.title}
+            </h3>
           )}
           <button
-            className="text-md text-blue-300 hover:scale-125 duration-300"
+            className="text-md text-blue-300 duration-300 hover:scale-125"
             onClick={handleEditToggle} // Toggle edit form
             disabled={loading}
           >
-            {formData.isEditing ? "Cancel" : "✍️"}
+            {formData.isEditing ? 'Cancel' : '✍️'}
           </button>
         </div>
 
@@ -129,7 +140,7 @@ const TaskCard = ({ task }: { task: ITask }) => {
               name="category"
               value={formData.category} // Bind select to formData
               onChange={handleChange} // Generic change handler
-              className="text-md p-2 border rounded-md"
+              className="text-md rounded-md border p-2"
             >
               <option value="Relationships">Relationships</option>
               <option value="Work">Work</option>
@@ -137,7 +148,7 @@ const TaskCard = ({ task }: { task: ITask }) => {
             </select>
             <button
               onClick={handleSaveEdit}
-              className="text-md text-green-500 hover:scale-125 duration-300"
+              className="text-md text-green-500 duration-300 hover:scale-125"
               disabled={loading}
             >
               Save
@@ -145,9 +156,9 @@ const TaskCard = ({ task }: { task: ITask }) => {
           </div>
         )}
 
-        <div className="flex w-full justify-between items-center gap-4">
+        <div className="flex w-full items-center justify-between gap-4">
           <button
-            className="text-md text-blue-300 hover:scale-125 duration-300"
+            className="text-md text-blue-300 duration-300 hover:scale-125"
             onClick={handleDelete}
             disabled={loading}
           >
@@ -155,7 +166,7 @@ const TaskCard = ({ task }: { task: ITask }) => {
           </button>
           {loading && <span className="text-blue-100">Loading...</span>}
           <button
-            className="text-md text-blue-300 hover:scale-125 duration-300"
+            className="text-md text-blue-300 duration-300 hover:scale-125"
             onClick={handleCompleted}
             disabled={loading}
           >
